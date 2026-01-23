@@ -242,7 +242,8 @@ function buildIconUrl_(iconSource, iconValue) {
 
   if (iconSource === ICON_SOURCE.DRIVE_FILE_ID || iconSource === "drive_file_id") {
     if (!iconValue) return "";
-    return "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(iconValue);
+    // サムネイルURL形式（GAS Webアプリ内での表示に適している）
+    return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(iconValue) + "&sz=w800";
   }
 
   return "";
