@@ -171,10 +171,11 @@
       border: 1px solid rgba(111, 191, 142, 0.40);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
-      padding: 16px;
       overflow: hidden;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       will-change: transform;
+      display: flex;
+      flex-direction: column;
     }
 
     .card:hover {
@@ -187,7 +188,43 @@
       box-shadow: var(--shadow-md), var(--ring);
     }
 
-    .card::before {
+    /* wide/tall cards have orange left line */
+    .card.wide::before,
+    .card.tall::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, rgba(245, 166, 35, 0.95), rgba(245, 166, 35, 0.25));
+      z-index: 10;
+    }
+
+    /* Background image container */
+    .cardBg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Gradient overlay for readability */
+    .cardBg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.85) 100%
+      );
+    }
+
+    /* Card without image - add subtle green pattern */
+    .card.no-image::after {
       content: "";
       position: absolute;
       width: 220px;
@@ -199,35 +236,30 @@
       pointer-events: none;
     }
 
-    /* wide/tall cards have orange left line */
-    .card.wide::after,
-    .card.tall::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 5px;
-      background: linear-gradient(180deg, rgba(245, 166, 35, 0.95), rgba(245, 166, 35, 0.25));
-    }
-
-    .cardTop {
+    /* Card content */
+    .cardContent {
+      position: relative;
+      z-index: 5;
+      padding: 16px;
+      margin-top: auto;
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
+    /* Icon (shown when no background image or as small badge) */
     .icon {
       width: 44px;
       height: 44px;
       border-radius: 14px;
-      background: rgba(111, 191, 142, 0.12);
-      border: 1px solid rgba(111, 191, 142, 0.22);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(111, 191, 142, 0.30);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       flex: 0 0 auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .icon img {
@@ -242,17 +274,23 @@
       color: var(--green-dark);
     }
 
+    .labelWrap {
+      flex: 1;
+    }
+
     .label {
       font-size: 16px;
       font-weight: 900;
       color: var(--green-dark);
       line-height: 1.2;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
     .desc {
-      margin-top: 8px;
+      margin-top: 4px;
       font-size: 12px;
       color: var(--text-sub);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
     .cardLink {
@@ -260,6 +298,7 @@
       inset: 0;
       border-radius: var(--radius);
       outline: none;
+      z-index: 20;
     }
 
     .cardLink:focus-visible {
@@ -269,17 +308,17 @@
     /* Layout sizes -> 12-col grid */
     .small {
       grid-column: span 4;
-      min-height: 124px;
+      min-height: 140px;
     }
 
     .wide {
       grid-column: span 8;
-      min-height: 124px;
+      min-height: 140px;
     }
 
     .tall {
       grid-column: span 4;
-      min-height: 262px;
+      min-height: 280px;
     }
 
     /* ====== Empty State ====== */
@@ -336,11 +375,11 @@
       .wide,
       .tall {
         grid-column: span 12;
-        min-height: 116px;
+        min-height: 120px;
       }
 
       .tall {
-        min-height: 150px;
+        min-height: 160px;
       }
 
       .footer {
@@ -390,23 +429,27 @@
       <? if (hasApps) { ?>
         <? for (var i = 0; i < apps.length; i++) { ?>
           <? var a = apps[i]; ?>
-          <section class="card <?= a.layout ?>" aria-label="<?= a.label ?>">
+          <section class="card <?= a.layout ?> <?= a.iconUrl ? '' : 'no-image' ?>" aria-label="<?= a.label ?>">
             <a class="cardLink"
                href="<?= a.url ?>"
                target="<?= a.openMode === 'same_tab' ? '_self' : '_blank' ?>"
                rel="noopener"
                title="<?= a.note ? a.note : a.label ?>"></a>
 
-            <div class="cardTop">
-              <div class="icon" aria-hidden="true">
-                <? if (a.iconUrl) { ?>
-                  <img src="<?= a.iconUrl ?>" alt="" loading="lazy">
-                <? } else { ?>
-                  <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
-                <? } ?>
-              </div>
+            <? if (a.iconUrl) { ?>
+              <!-- Background image -->
+              <div class="cardBg" style="background-image: url('<?= a.iconUrl ?>');"></div>
+            <? } ?>
 
-              <div>
+            <div class="cardContent">
+              <? if (!a.iconUrl) { ?>
+                <!-- Fallback icon when no image -->
+                <div class="icon" aria-hidden="true">
+                  <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
+                </div>
+              <? } ?>
+
+              <div class="labelWrap">
                 <div class="label"><?= a.label ?></div>
                 <? if (a.note) { ?>
                   <div class="desc"><?= a.note ?></div>
