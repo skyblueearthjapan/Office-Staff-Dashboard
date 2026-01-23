@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?= dashboardTitle ?></title>
+
+  <style>
+    /* ====== Theme Tokens ====== */
+    :root {
+      --bg: #EAF5EE;
+      --surface: #FFFFFF;
+      --green: #6FBF8E;
+      --green-dark: #3E8E6D;
+      --text: #2E2E2E;
+      --text-sub: #6B6B6B;
+      --orange: #F5A623;
+      --orange-soft: #FFD8A8;
+
+      --radius: 16px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 10px 26px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.16);
+      --ring: 0 0 0 3px rgba(111, 191, 142, 0.22);
+    }
+
+    /* ====== Base ====== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background:
+        radial-gradient(1100px 420px at 20% 0%, rgba(111, 191, 142, 0.18), transparent 60%),
+        radial-gradient(900px 360px at 80% 10%, rgba(245, 166, 35, 0.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+    }
+
+    /* ====== Header ====== */
+    .header {
+      position: relative;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(111, 191, 142, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .headerRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(111, 191, 142, 0.14);
+      border: 1px solid rgba(111, 191, 142, 0.30);
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid rgba(111, 191, 142, 0.50);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--green-dark);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+      border-color: rgba(245, 166, 35, 0.70);
+    }
+
+    .btn:active {
+      transform: translateY(0px) scale(0.99);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--ring), 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Orange flow line */
+    .flow {
+      margin-top: 12px;
+      height: 26px;
+      position: relative;
+    }
+
+    .flow::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(180px 22px at 15% 50%, rgba(245, 166, 35, 0.30), transparent 70%),
+        radial-gradient(220px 26px at 55% 50%, rgba(245, 166, 35, 0.24), transparent 72%),
+        radial-gradient(180px 22px at 85% 50%, rgba(245, 166, 35, 0.28), transparent 70%);
+      filter: blur(0.2px);
+      opacity: 0.9;
+      transform: skewX(-10deg);
+    }
+
+    .flow::after {
+      content: "";
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(245, 166, 35, 0.65), transparent);
+      transform: translateY(-50%);
+      opacity: 0.8;
+    }
+
+    /* ====== Grid ====== */
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    /* ====== Cards ====== */
+    .card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(111, 191, 142, 0.40);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      will-change: transform;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(245, 166, 35, 0.65);
+    }
+
+    .card:focus-within {
+      box-shadow: var(--shadow-md), var(--ring);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      left: -120px;
+      top: -120px;
+      background: radial-gradient(circle at 60% 60%, rgba(111, 191, 142, 0.22), transparent 60%);
+      transform: rotate(12deg);
+      pointer-events: none;
+    }
+
+    /* wide/tall cards have orange left line */
+    .card.wide::after,
+    .card.tall::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, rgba(245, 166, 35, 0.95), rgba(245, 166, 35, 0.25));
+    }
+
+    .cardTop {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(111, 191, 142, 0.12);
+      border: 1px solid rgba(111, 191, 142, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .iconFallback {
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--green-dark);
+    }
+
+    .label {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--green-dark);
+      line-height: 1.2;
+    }
+
+    .desc {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .cardLink {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      outline: none;
+    }
+
+    .cardLink:focus-visible {
+      box-shadow: var(--ring);
+    }
+
+    /* Layout sizes -> 12-col grid */
+    .small {
+      grid-column: span 4;
+      min-height: 124px;
+    }
+
+    .wide {
+      grid-column: span 8;
+      min-height: 124px;
+    }
+
+    .tall {
+      grid-column: span 4;
+      min-height: 262px;
+    }
+
+    /* ====== Empty State ====== */
+    .empty {
+      grid-column: span 12;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-sub);
+    }
+
+    .empty h2 {
+      color: var(--green-dark);
+      margin: 0 0 12px;
+    }
+
+    /* ====== Footer ====== */
+    .footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-sub);
+      font-size: 12px;
+      padding: 0 4px;
+    }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 900px) {
+      .small {
+        grid-column: span 6;
+      }
+
+      .wide {
+        grid-column: span 12;
+      }
+
+      .tall {
+        grid-column: span 6;
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .headerRow {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .title {
+        font-size: 16px;
+      }
+
+      .small,
+      .wide,
+      .tall {
+        grid-column: span 12;
+        min-height: 116px;
+      }
+
+      .tall {
+        min-height: 150px;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .card,
+      .btn {
+        transition: none;
+      }
+
+      .card:hover,
+      .btn:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="headerRow">
+        <? if (portalUrl) { ?>
+          <a class="btn" href="<?= portalUrl ?>" target="_blank" rel="noopener">
+            <span aria-hidden="true">&#127968;</span> 社内ポータルへ
+          </a>
+        <? } else { ?>
+          <div></div>
+        <? } ?>
+
+        <div class="title">
+          <?= dashboardTitle ?>
+          <span class="badge">Dashboard</span>
+        </div>
+      </div>
+      <div class="flow" aria-hidden="true"></div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="grid" id="grid">
+      <? if (hasApps) { ?>
+        <? for (var i = 0; i < apps.length; i++) { ?>
+          <? var a = apps[i]; ?>
+          <section class="card <?= a.layout ?>" aria-label="<?= a.label ?>">
+            <a class="cardLink"
+               href="<?= a.url ?>"
+               target="<?= a.openMode === 'same_tab' ? '_self' : '_blank' ?>"
+               rel="noopener"
+               title="<?= a.note ? a.note : a.label ?>"></a>
+
+            <div class="cardTop">
+              <div class="icon" aria-hidden="true">
+                <? if (a.iconUrl) { ?>
+                  <img src="<?= a.iconUrl ?>" alt="" loading="lazy">
+                <? } else { ?>
+                  <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
+                <? } ?>
+              </div>
+
+              <div>
+                <div class="label"><?= a.label ?></div>
+                <? if (a.note) { ?>
+                  <div class="desc"><?= a.note ?></div>
+                <? } ?>
+              </div>
+            </div>
+          </section>
+        <? } ?>
+      <? } else { ?>
+        <div class="empty">
+          <h2>表示できるアプリがありません</h2>
+          <p>APP_MASTERシートにアプリを追加し、<br>enabled=TRUE かつ status=OK に設定してください。</p>
+        </div>
+      <? } ?>
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>※ ボタンは別タブで開きます（既定）</div>
+      <div>更新：<?= lastUpdated ?></div>
+    </div>
+
+  </div>
+</body>
+</html>
