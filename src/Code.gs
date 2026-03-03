@@ -185,8 +185,8 @@ function loadApps_(ss, defaultOpenMode) {
       iconUrl: "",
     };
 
-    // layout正規化（small/wide/tall以外はsmall）
-    if (!["small", "wide", "tall"].includes(app.layout)) {
+    // layout正規化（small/wide/tall/full以外はsmall）
+    if (!["small", "wide", "tall", "full"].includes(app.layout)) {
       app.layout = "small";
     }
 
