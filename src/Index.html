@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= dashboardTitle ?></title>
 
+  <!-- Favicon -->
+  <link rel="icon" href="https://drive.google.com/thumbnail?id=1LTg1MTJPMkz1ixBmWMdg1Odcz7X3SiRE&sz=w32" sizes="32x32" type="image/png">
+  <link rel="icon" href="https://drive.google.com/thumbnail?id=1LTg1MTJPMkz1ixBmWMdg1Odcz7X3SiRE&sz=w192" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1LTg1MTJPMkz1ixBmWMdg1Odcz7X3SiRE&sz=w180" sizes="180x180">
+
+  <!-- Web App Manifest (dynamic for Chrome install) -->
+  <script>
+    const manifest = {
+      name: "<?= dashboardTitle ?>",
+      short_name: "社内ポータル",
+      icons: [
+        { src: "https://drive.google.com/thumbnail?id=1LTg1MTJPMkz1ixBmWMdg1Odcz7X3SiRE&sz=w192", sizes: "192x192", type: "image/png" },
+        { src: "https://drive.google.com/thumbnail?id=1LTg1MTJPMkz1ixBmWMdg1Odcz7X3SiRE&sz=w512", sizes: "512x512", type: "image/png" }
+      ],
+      display: "standalone",
+      background_color: "#EAF5EE",
+      theme_color: "#3E8E6D"
+    };
+    const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = URL.createObjectURL(blob);
+    document.head.appendChild(link);
+  </script>
+
   <style>
     /* ====== Theme Tokens ====== */
     :root {
