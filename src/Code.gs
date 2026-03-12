@@ -36,6 +36,7 @@ const ICON_SOURCE = {
 const OPEN_MODE = {
   NEW_TAB: "new_tab",
   SAME_TAB: "same_tab",
+  EMBED: "embed",
 };
 
 /**

@@ -353,6 +353,53 @@
       min-height: 140px;
     }
 
+    /* ====== Embed (iframe) Card ====== */
+    .card.embed-card {
+      cursor: default;
+    }
+
+    .card.embed-card:hover {
+      transform: none;
+    }
+
+    .card.embed-card .embedWrap {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card.embed-card .embedWrap iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .card.embed-card .cardContent {
+      margin-top: 0;
+      flex: 0 0 auto;
+      border-bottom: 1px solid rgba(111, 191, 142, 0.25);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .card.embed-card.small {
+      min-height: 300px;
+    }
+
+    .card.embed-card.wide {
+      min-height: 360px;
+    }
+
+    .card.embed-card.tall {
+      min-height: 500px;
+    }
+
+    .card.embed-card.full {
+      min-height: 420px;
+    }
+
     /* ====== Empty State ====== */
     .empty {
       grid-column: span 12;
@@ -391,6 +438,15 @@
         grid-column: span 6;
         min-height: 220px;
       }
+
+      .card.embed-card.small,
+      .card.embed-card.wide {
+        min-height: 280px;
+      }
+
+      .card.embed-card.tall {
+        min-height: 400px;
+      }
     }
 
     @media (max-width: 560px) {
@@ -413,6 +469,13 @@
 
       .tall {
         min-height: 160px;
+      }
+
+      .card.embed-card.small,
+      .card.embed-card.wide,
+      .card.embed-card.tall,
+      .card.embed-card.full {
+        min-height: 260px;
       }
 
       .footer {
@@ -462,34 +525,64 @@
       <? if (hasApps) { ?>
         <? for (var i = 0; i < apps.length; i++) { ?>
           <? var a = apps[i]; ?>
-          <section class="card <?= a.layout ?> <?= a.iconUrl ? '' : 'no-image' ?>" aria-label="<?= a.label ?>">
-            <a class="cardLink"
-               href="<?= a.url ?>"
-               target="<?= a.openMode === 'same_tab' ? '_self' : '_blank' ?>"
-               rel="noopener"
-               title="<?= a.note ? a.note : a.label ?>"></a>
-
-            <? if (a.iconUrl) { ?>
-              <!-- Background image -->
-              <div class="cardBg" style="background-image: url('<?= a.iconUrl ?>');"></div>
-            <? } ?>
-
-            <div class="cardContent">
-              <? if (!a.iconUrl) { ?>
-                <!-- Fallback icon when no image -->
-                <div class="icon" aria-hidden="true">
-                  <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
+          <? if (a.openMode === 'embed') { ?>
+            <!-- Embed (iframe) card -->
+            <section class="card embed-card <?= a.layout ?>" aria-label="<?= a.label ?>">
+              <div class="cardContent">
+                <? if (!a.iconUrl) { ?>
+                  <div class="icon" aria-hidden="true">
+                    <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
+                  </div>
+                <? } else { ?>
+                  <div class="icon" aria-hidden="true">
+                    <img src="<?= a.iconUrl ?>" alt="">
+                  </div>
+                <? } ?>
+                <div class="labelWrap">
+                  <div class="label"><?= a.label ?></div>
+                  <? if (a.note) { ?>
+                    <div class="desc"><?= a.note ?></div>
+                  <? } ?>
                 </div>
+              </div>
+              <div class="embedWrap">
+                <iframe src="<?= a.url ?>"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        loading="lazy"
+                        title="<?= a.label ?>"></iframe>
+              </div>
+            </section>
+          <? } else { ?>
+            <!-- Normal link card -->
+            <section class="card <?= a.layout ?> <?= a.iconUrl ? '' : 'no-image' ?>" aria-label="<?= a.label ?>">
+              <a class="cardLink"
+                 href="<?= a.url ?>"
+                 target="<?= a.openMode === 'same_tab' ? '_self' : '_blank' ?>"
+                 rel="noopener"
+                 title="<?= a.note ? a.note : a.label ?>"></a>
+
+              <? if (a.iconUrl) { ?>
+                <!-- Background image -->
+                <div class="cardBg" style="background-image: url('<?= a.iconUrl ?>');"></div>
               <? } ?>
 
-              <div class="labelWrap">
-                <div class="label"><?= a.label ?></div>
-                <? if (a.note) { ?>
-                  <div class="desc"><?= a.note ?></div>
+              <div class="cardContent">
+                <? if (!a.iconUrl) { ?>
+                  <!-- Fallback icon when no image -->
+                  <div class="icon" aria-hidden="true">
+                    <span class="iconFallback"><?= a.label.substring(0, 2) ?></span>
+                  </div>
                 <? } ?>
+
+                <div class="labelWrap">
+                  <div class="label"><?= a.label ?></div>
+                  <? if (a.note) { ?>
+                    <div class="desc"><?= a.note ?></div>
+                  <? } ?>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          <? } ?>
         <? } ?>
       <? } else { ?>
         <div class="empty">
