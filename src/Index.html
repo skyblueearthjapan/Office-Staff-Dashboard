@@ -218,7 +218,8 @@
     .card.wide::before,
     .card.tall::before,
     .card.full::before,
-    .card.big::before {
+    .card.big::before,
+    .card.superbig::before {
       content: "";
       position: absolute;
       left: 0;
@@ -359,6 +360,11 @@
       min-height: 280px;
     }
 
+    .superbig {
+      grid-column: span 12;
+      min-height: 420px;
+    }
+
     /* ====== Embed (iframe) Card ====== */
     .card.embed-card {
       cursor: default;
@@ -408,6 +414,10 @@
 
     .card.embed-card.big {
       min-height: 720px;
+    }
+
+    .card.embed-card.superbig {
+      min-height: 1080px;
     }
 
     /* ====== Empty State ====== */
@@ -461,6 +471,10 @@
       .card.embed-card.big {
         min-height: 560px;
       }
+
+      .card.embed-card.superbig {
+        min-height: 840px;
+      }
     }
 
     @media (max-width: 560px) {
@@ -477,13 +491,18 @@
       .wide,
       .tall,
       .full,
-      .big {
+      .big,
+      .superbig {
         grid-column: span 12;
         min-height: 120px;
       }
 
       .big {
         min-height: 200px;
+      }
+
+      .superbig {
+        min-height: 280px;
       }
 
       .tall {
@@ -499,6 +518,10 @@
 
       .card.embed-card.big {
         min-height: 400px;
+      }
+
+      .card.embed-card.superbig {
+        min-height: 540px;
       }
 
       .footer {

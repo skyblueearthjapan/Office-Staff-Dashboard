@@ -187,7 +187,7 @@ function loadApps_(ss, defaultOpenMode) {
     };
 
     // layout正規化（small/wide/tall/full以外はsmall）
-    if (!["small", "wide", "tall", "full", "big"].includes(app.layout)) {
+    if (!["small", "wide", "tall", "full", "big", "superbig"].includes(app.layout)) {
       app.layout = "small";
     }
 
