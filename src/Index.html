@@ -216,6 +216,7 @@
     /* all cards have orange left line */
     .card.small::before,
     .card.wide::before,
+    .card.xwide::before,
     .card.tall::before,
     .card.full::before,
     .card.big::before,
@@ -345,6 +346,11 @@
       min-height: 140px;
     }
 
+    .xwide {
+      grid-column: span 9;
+      min-height: 140px;
+    }
+
     .tall {
       grid-column: span 4;
       min-height: 280px;
@@ -404,6 +410,10 @@
       min-height: 360px;
     }
 
+    .card.embed-card.xwide {
+      min-height: 360px;
+    }
+
     .card.embed-card.tall {
       min-height: 500px;
     }
@@ -454,13 +464,18 @@
         grid-column: span 12;
       }
 
+      .xwide {
+        grid-column: span 12;
+      }
+
       .tall {
         grid-column: span 6;
         min-height: 220px;
       }
 
       .card.embed-card.small,
-      .card.embed-card.wide {
+      .card.embed-card.wide,
+      .card.embed-card.xwide {
         min-height: 280px;
       }
 
@@ -489,6 +504,7 @@
 
       .small,
       .wide,
+      .xwide,
       .tall,
       .full,
       .big,
@@ -511,6 +527,7 @@
 
       .card.embed-card.small,
       .card.embed-card.wide,
+      .card.embed-card.xwide,
       .card.embed-card.tall,
       .card.embed-card.full {
         min-height: 260px;
