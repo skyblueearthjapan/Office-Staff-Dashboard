@@ -219,6 +219,7 @@
     .card.xwide::before,
     .card.tall::before,
     .card.full::before,
+    .card.halffull::before,
     .card.big::before,
     .card.superbig::before {
       content: "";
@@ -361,6 +362,11 @@
       min-height: 140px;
     }
 
+    .halffull {
+      grid-column: span 12;
+      min-height: 70px;
+    }
+
     .big {
       grid-column: span 12;
       min-height: 280px;
@@ -420,6 +426,10 @@
 
     .card.embed-card.full {
       min-height: 420px;
+    }
+
+    .card.embed-card.halffull {
+      min-height: 210px;
     }
 
     .card.embed-card.big {
@@ -507,10 +517,15 @@
       .xwide,
       .tall,
       .full,
+      .halffull,
       .big,
       .superbig {
         grid-column: span 12;
         min-height: 120px;
+      }
+
+      .halffull {
+        min-height: 70px;
       }
 
       .big {
