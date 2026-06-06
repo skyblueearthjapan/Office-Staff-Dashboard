@@ -635,7 +635,7 @@
             <section class="card <?= a.layout ?> <?= a.iconUrl ? '' : 'no-image' ?>" aria-label="<?= a.label ?>">
               <a class="cardLink"
                  href="<?= a.url ?>"
-                 target="<?= a.openMode === 'same_tab' ? '_self' : '_blank' ?>"
+                 target="<?= a.openMode === 'same_tab' ? '_top' : '_blank' ?>"
                  rel="noopener"
                  title="<?= a.note ? a.note : a.label ?>"></a>
 
